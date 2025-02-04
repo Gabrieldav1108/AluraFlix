@@ -24,16 +24,11 @@ class VideosController extends Controller
     }
 
     public function store(Request $request){
-        $validator = Validator::make($request->all(), [
-            'title' => 'required|max:255',
-            'description' => 'required',
-            'url' => 'required',
-            'category_id' => 'required'
-        ]);
-        $validator->validate();
-
+        $data = $this->validateVideo($request);
+        $data['category_id'] = $data['category_id'] ?? '1';
+        
         return response()
-                ->json($this->videoRepository->store($validator->validated()), 201);
+                ->json($this->videoRepository->store($data), 201);
         //$videos = $this->videoRepository->store($validator->validated());
     }
 
@@ -67,6 +62,43 @@ class VideosController extends Controller
             return response()
                     ->json('The selected video does not exist', 404);
         }
+    }
+
+    public function search(Request $request){
+        echo 'ok';
+    }
+
+    public function validateVideo(Request $request): array{
+        $fields = $request->all();
+
+        $rules = [
+            'title' => 'required|max:255',
+            'description' => 'required',
+            'url' => 'required',
+            'category_id' => 'nullable'
+        ];
+
+        // foreach ($rules as $field => $rule) {
+        //     if (!ValidatorHelper::shouldValidateField($fields, $field)) {
+        //         unset($rules[$field]);
+        //     }
+        // }
+
+        $validator = Validator::make(
+            $fields,
+            $rules,
+            [
+                'title.required' => 'O título da categoria é obrigatório',
+                'title.max' => 'O máximo de caracteres para o título foi excedido',
+                'color.required' => 'A cor da categoria é obrigatória',
+                'color.min' => 'O mínimo de caracteres para cor é de :min'
+            ]
+            );
+
+
+            //dd($validator->validated());
+            $validator->validate();
+            return $validator->validated();
     }
 
 }

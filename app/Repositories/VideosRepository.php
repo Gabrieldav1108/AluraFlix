@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Models\Category;
 use App\Models\Video;
 use App\Traits\HttpResponses;
 class VideosRepository{
@@ -11,7 +12,6 @@ class VideosRepository{
     }
 
     public function store(array $data){
-        //dd($data);
         $video = new Video();
         $video->title = $data['title'];
         $video->description = $data['description'];
@@ -19,8 +19,9 @@ class VideosRepository{
         $video->category_id = $data['category_id'];
 
         $video->save();
+        
         return $video;
-    }
+    }   
 
     public function update(Video $video, array $data){
         //dd($data, $request);

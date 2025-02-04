@@ -8,6 +8,9 @@ class Video extends Model
 {
     protected $fillable = ['title', 'description', 'url', 'category_id'];
     protected $with = ['category'];
+    protected $attributes = [
+        'category_id' => '1'
+    ];
     public  $timestamps = false;
     public function category()
     {

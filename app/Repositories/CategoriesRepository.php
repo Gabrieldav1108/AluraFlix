@@ -3,6 +3,8 @@
 namespace App\Repositories;
 
 use App\Models\Category;
+use App\Models\Video;
+
 
 class CategoriesRepository
 {
@@ -12,7 +14,7 @@ class CategoriesRepository
     
     public function store(array $data){
         $category = new Category();
-
+        
         $category->title = $data['title'];
         $category->color = $data['color'];
 
@@ -33,6 +35,10 @@ class CategoriesRepository
     }
     public function delete(Category $category){
         $category->delete();
+    }
+
+    public function videosByCategory(string $id){
+        return Video::where('category_id', '=', $id)->get();
     }
 
 }
