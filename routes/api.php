@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\CategoriesController;
+use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\VideosController;
 use Illuminate\Support\Facades\Route;
 
@@ -28,5 +29,5 @@ Route::prefix('categories')
 Route::prefix('login')
 ->name('login.')
 ->group(function(){
-    Route::post('/', [])->name('store');
+    Route::post('/', [UserController::class, 'store'])->name('store');
 });
