@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Repositories\CategoriesRepository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class CategoriesController extends Controller
@@ -19,6 +20,7 @@ class CategoriesController extends Controller
     }
 
     public function list(){
+        //dd(Auth::user());
         return $this->categoriesRepository->list();
     }
 

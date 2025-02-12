@@ -1,14 +1,24 @@
 <?php
 
 use App\Http\Controllers\API\CategoriesController;
+use App\Http\Controllers\API\LoginController;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\VideosController;
+use App\Http\Middleware\Authenticate;
 use Illuminate\Support\Facades\Route;
+
+Route::prefix('login')
+->name('login.')
+->group(function() {
+    Route::post('/', [LoginController::class, 'login'])->name('login');
+    Route::post('/register', [UserController::class, 'store'])->name('store');
+
+});
 
 Route::prefix('videos')
 ->name('videos.')
 ->group(function(){
-    Route::get('/', [VideosController::class, 'list'])->name('list');
+    Route::get('/', [VideosController::class, 'list'])->middleware(Authenticate::class)->name('list');
     Route::get('/search', [VideosController::class, 'search'])->name('search');
     Route::post('/', [VideosController::class, 'store'])->name('store');
     Route::put('/{video}', [VideosController::class, 'update'])->name('update');
@@ -24,10 +34,4 @@ Route::prefix('categories')
     Route::post('/', [CategoriesController::class, 'store'])->name('store');
     Route::put('/{id}', [CategoriesController::class, 'update'])->name('update');
     Route::delete('/{id}', [CategoriesController::class, 'delete'])->name('delete');
-});
-
-Route::prefix('login')
-->name('login.')
-->group(function(){
-    Route::post('/', [UserController::class, 'store'])->name('store');
 });
