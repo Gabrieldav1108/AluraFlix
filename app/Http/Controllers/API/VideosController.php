@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\VideoResource;
 use App\Models\Category;
 use App\Models\Video;
 use App\Repositories\VideosRepository;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -27,8 +29,18 @@ class VideosController extends Controller
         $data = $this->validateVideo($request);
         $data['category_id'] = $data['category_id'] ?? '1';
         
-        return response()
-                ->json($this->videoRepository->store($data), 201);
+        try{
+            $video = $this->videoRepository->store($data);
+
+            return $this->serverSuccessResponse(
+                'Video criado com sucesso!',
+                new VideoResource($video)
+            );
+        }catch(Exception){
+            return $this->serverErrorResponse("Não foi possivel criar o video :(");
+        }
+        // return response()
+        //         ->json($this->videoRepository->store($data), 201);
         //$videos = $this->videoRepository->store($validator->validated());
     }
 

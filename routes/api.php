@@ -11,8 +11,7 @@ Route::prefix('login')
 ->name('login.')
 ->group(function() {
     Route::post('/', [LoginController::class, 'login'])->name('login');
-    Route::post('/register', [UserController::class, 'store'])->name('store');
-
+    Route::post('/register', [UserController::class, 'store'])->name('register');
 });
 
 Route::prefix('videos')

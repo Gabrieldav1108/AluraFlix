@@ -43,7 +43,8 @@ class LoginController extends Controller
             return new JsonResponse([
                 'message' => 'Login realizado com sucesso',
                 'data' => [
-                    'user' => $user      
+                    'user' => $user,
+                    'api_token' => $user->createToken('api_token')->plainTextToken
                 ]
                 ]);
         }

@@ -18,7 +18,7 @@ class Authenticate
     public function handle(Request $request, Closure $next): Response
     {
         if(!Auth::check()){
-            return redirect(route('login.login'));
+            abort(401, 'O usuário não está autenticado');
         }
         return $next($request);
     }

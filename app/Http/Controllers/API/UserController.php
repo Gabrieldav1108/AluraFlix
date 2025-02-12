@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
 use App\Repositories\UserRepository;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -24,7 +26,19 @@ class UserController extends Controller
         );
         $validator->validate();
 
-        return response()
-            ->json($this->userRepository->store($validator->validated()));
+        $data = $validator->validated();
+        try{
+            $user = $this->userRepository->store($data);
+
+            return $this->serverSuccessResponse(
+                'O usuário foi criado com sucesso!',
+                new UserResource($user)
+            );
+        } catch(Exception $e){
+            dd($e);
+            return $this->serverErrorResponse('Não foi possivel criar o usuário');
+        }
+        // return response()
+        //     ->json($this->userRepository->store($validator->validated()));
     }
 }

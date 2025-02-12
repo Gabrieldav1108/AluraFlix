@@ -2,12 +2,15 @@
 
 namespace App\Repositories;
 
+use App\Http\Controllers\Controller;
+use App\Http\Resources\CategoryResource;
 use App\Models\Category;
 use App\Models\Video;
 
 
-class CategoriesRepository
+class CategoriesRepository extends Controller
 {
+
     public function list(){
         return Category::all();
     }

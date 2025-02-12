@@ -4,8 +4,10 @@ namespace App\Http\Controllers\API;
 
 use App\Helpers\ValidatorHelper;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\CategoryResource;
 use App\Models\Category;
 use App\Repositories\CategoriesRepository;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -27,8 +29,18 @@ class CategoriesController extends Controller
     public function store(Request $request){
         $data = $this->validateCategory($request);
 
-        return response()
-            ->json($this->categoriesRepository->store($data));
+        try{
+            $category = $this->categoriesRepository->store($data);
+            
+            return $this->serverSuccessResponse(
+                'A categoria foi criada com sucesso!',
+                new CategoryResource($category)
+            );
+        }catch(Exception){
+            return $this->serverErrorResponse('Não foi possivel criar a categoria :(');
+        }
+        // return response()
+        //     ->json($this->categoriesRepository->store($data));
     }
 
     public function update(Request $request, string $id){
